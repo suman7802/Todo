@@ -2,38 +2,35 @@ import React, {useState, useEffect} from "react";
 
 const TodoHomePage = () => {
   const [todos, setTodos] = useState([
-    // {id: 1, text: "Buy groceries", completed: false, editable: false},
-    // {id: 2, text: "Finish homework", completed: true, editable: false},
-    // {id: 3, text: "Walk the dog", completed: false, editable: false},
+    {id: 1, text: "Buy groceries", completed: false, editable: false},
+    {id: 2, text: "Finish homework", completed: true, editable: false},
+    {id: 3, text: "Walk the dog", completed: false, editable: false},
   ]);
 
   const [newTodoText, setNewTodoText] = useState("");
 
-  useEffect(() => {
-    const fetchTodos = async () => {
-      try {
-        const response = await fetch("http://localhost:8000/api/todo");
-        const data = await response.json();
-        
-        // Assuming the API response is an array of objects
-        // with properties "todo", "completed", and "_id"
-        const updatedTodos = data.map((todoItem) => {
-          return {
-            id: todoItem._id,
-            text: todoItem.todo,
-            completed: todoItem.completed,
-            editable: false,
-          };
-        });
+  // useEffect(() => {
+  //   const fetchTodos = async () => {
+  //     try {
+  //       const response = await fetch("http://localhost:8000/api/todo");
+  //       const data = await response.json();
+  //       const updatedTodos = data.map((todoItem) => {
+  //         return {
+  //           id: todoItem._id,
+  //           text: todoItem.todo,
+  //           completed: todoItem.completed,
+  //           editable: false,
+  //         };
+  //       });
   
-        setTodos(updatedTodos);
-      } catch (error) {
-        console.error("Error fetching todos:", error.message);
-      }
-    };
+  //       setTodos(updatedTodos);
+  //     } catch (error) {
+  //       console.error("Error fetching todos:", error.message);
+  //     }
+  //   };
   
-    fetchTodos();
-  }, []);
+  //   fetchTodos();
+  // }, []);
 
   const handleDelete = (todoId) => {
     const updatedTodos = todos.filter((todo) => todo.id !== todoId);
