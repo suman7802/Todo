@@ -34,12 +34,16 @@ async function httpLogin(req, res) {
 
     const passwordMatch = await bcrypt.compare(password, user.password);
 
-    if (!passwordMatch)return res.status(400).json({message: "Invalid credentials"});
+    if (!passwordMatch)
+      return res.status(400).json({message: "Invalid credentials"});
 
     const token = createToken(user);
-    
+
     return res
-      .cookie("access-token-01", token)
+      .cookie("access-token-01", token, {
+        secure: false,
+        Path: "*",
+      })
       .status(200)
       .json({message: "Login successful"});
   } catch (err) {

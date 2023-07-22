@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
+import axios from "axios";
 
 const url = "http://localhost:8000/api/user/login";
 
@@ -30,43 +31,23 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await axios.post(
+        url,
+        {
+          email,
+          password,
         },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
-
-      // Extract the "access-token-01" cookie from the response headers
-      const tokenCookie = response.headers.get("set-cookie");
-
-      const data = await response.json();
-      console.log(data);
-
-      if (response.ok) {
-        if (data.message) {
-          setResponseFromServer(data.message);
-        } else {
-          setResponseFromServer("Login successful");
+        {
+          headers: {"Content-Type": "application/json"},
+          withCredentials: true,
         }
-
-        // Save the "access-token-01" cookie in the browser
-        document.cookie = tokenCookie;
-      } else {
-        if (data.message) {
-          setResponseFromServer(data.message);
-        } else {
-          setResponseFromServer("Login failed");
-        }
-      }
+      );
+      const data = await response.data;
+      setResponseFromServer(data.message);
     } catch (error) {
       console.error("Error during login:", error.message);
+      setResponseFromServer(error.message);
     }
   };
 

@@ -1,36 +1,31 @@
 import React, {useState, useEffect} from "react";
+import axios from "axios";
 
 const TodoHomePage = () => {
-  const [todos, setTodos] = useState([
-    {id: 1, text: "Buy groceries", completed: false, editable: false},
-    {id: 2, text: "Finish homework", completed: true, editable: false},
-    {id: 3, text: "Walk the dog", completed: false, editable: false},
-  ]);
+  const [todos, setTodos] = useState([]);
 
   const [newTodoText, setNewTodoText] = useState("");
 
-  // useEffect(() => {
-  //   const fetchTodos = async () => {
-  //     try {
-  //       const response = await fetch("http://localhost:8000/api/todo");
-  //       const data = await response.json();
-  //       const updatedTodos = data.map((todoItem) => {
-  //         return {
-  //           id: todoItem._id,
-  //           text: todoItem.todo,
-  //           completed: todoItem.completed,
-  //           editable: false,
-  //         };
-  //       });
-  
-  //       setTodos(updatedTodos);
-  //     } catch (error) {
-  //       console.error("Error fetching todos:", error.message);
-  //     }
-  //   };
-  
-  //   fetchTodos();
-  // }, []);
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/todo");
+        const data = response.data;
+        console.log(data);
+        const updatedTodos = data.map((todoItem) => {
+          return {
+            id: todoItem._id,
+            todo: todoItem.todo,
+            completed: todoItem.completed,
+          };
+        });
+        setTodos(updatedTodos);
+      } catch (error) {
+        console.error("Error fetching todos:", error.message);
+      }
+    };
+    fetchTodos();
+  }, []);
 
   const handleDelete = (todoId) => {
     const updatedTodos = todos.filter((todo) => todo.id !== todoId);
@@ -56,11 +51,10 @@ const TodoHomePage = () => {
 
     const updatedTodos = todos.map((todo) => {
       if (todo.id === todoId) {
-        return {...todo, text: trimmedText, editable: false};
+        return {...todo, todo: trimmedText, editable: false};
       }
       return todo;
     });
-
     setTodos(updatedTodos);
   };
 
@@ -77,7 +71,7 @@ const TodoHomePage = () => {
   const handleInputChange = (todoId, newText) => {
     const updatedTodos = todos.map((todo) => {
       if (todo.id === todoId) {
-        return {...todo, text: newText};
+        return {...todo, todo: newText};
       }
       return todo;
     });
@@ -109,7 +103,7 @@ const TodoHomePage = () => {
 
     const newTodo = {
       id: todos.length + 1, // You can use a more robust method for generating unique IDs
-      text: trimmedText,
+      todo: trimmedText,
       completed: false,
       editable: false,
     };
@@ -124,7 +118,7 @@ const TodoHomePage = () => {
       <div className="add-todo">
         <input
           className="inside-add-todo"
-          type="text"
+          type="todo"
           value={newTodoText}
           onChange={(e) => setNewTodoText(e.target.value)}
         />
@@ -132,26 +126,28 @@ const TodoHomePage = () => {
           <button onClick={handleAddTodo}>Add</button>
         </div>
       </div>
+      {todos.length === 0 ? <h2>Empty</h2> : null}
       <ul className="todo-list">
         {todos.map((todo) => (
           <li
             key={todo.id}
-            className={`todo-item ${todo.completed ? "completed" : ""}`}>
+            className={`todo-item  ${todo.completed ? "completed" : ""}`}>
             {todo.editable ? (
               <input
-                type="text"
-                value={todo.text}
+                className="inside-add-todo"
+                type="todo"
+                value={todo.todo}
                 onChange={(e) => handleInputChange(todo.id, e.target.value)}
-                onKeyDown={(e) => handleKeyDown(e, todo.id, todo.text)}
+                onKeyDown={(e) => handleKeyDown(e, todo.id, todo.todo)}
               />
             ) : (
-              <span>{todo.text}</span>
+              <span>{todo.todo}</span>
             )}
             <div className="todo-actions">
               {todo.editable ? (
                 <>
                   <div className="save-cancel">
-                    <button onClick={() => handleSave(todo.id, todo.text)}>
+                    <button onClick={() => handleSave(todo.id, todo.todo)}>
                       Save
                     </button>
                     <button onClick={() => handleCancel(todo.id)}>

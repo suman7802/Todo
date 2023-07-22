@@ -2,6 +2,7 @@ const Todo = require("../models/todo.model");
 
 async function httpGetAllTodos(req, res) {
   const userId = req.user._id;
+
   try {
     const todos = await Todo.find({
       user: userId,
@@ -57,8 +58,6 @@ async function httpUpdateTodo(req, res) {
     return res.status(200).json(todo);
   } catch (error) {}
 }
-
-
 
 module.exports = {
   httpGetAllTodos,

@@ -77,9 +77,14 @@ a {
   box-shadow: 3px 3px 3px rgba(68, 68, 68, 0.314);
   position: relative;
 }
-.todo-item input[type="text"],
+
 .inside-add-todo {
+  width: 95%;
+  border: none;
+  outline: none;
   border-radius: 5px;
+  height: 1.5rem;
+  padding-left: 5px;
 }
 .todo-item {
   border-radius: 7px;

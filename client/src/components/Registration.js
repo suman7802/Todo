@@ -4,6 +4,9 @@ import {Link} from "react-router-dom";
 const url = "http://localhost:8000/api/user/registration";
 
 const RegistrationForm = () => {
+  const [responseFromServer, setResponseFromServer] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -15,9 +18,6 @@ const RegistrationForm = () => {
     password: "",
     confirmPassword: "",
   });
-
-  const [responseFromServer, setResponseFromServer] = useState("");
-  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const validateEmail = (email) => {
     const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -43,11 +43,7 @@ const RegistrationForm = () => {
     }));
   };
 
-  const handlePasswordPaste = (e) => {
-    e.preventDefault();
-  };
-
-  const handlePasswordCopy = (e) => {
+  const handlePasswordCopyPaste = (e) => {
     e.preventDefault();
   };
 
@@ -70,6 +66,7 @@ const RegistrationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const validationErrors = {};
 
     if (formData.password !== formData.confirmPassword) {
@@ -79,7 +76,6 @@ const RegistrationForm = () => {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      // Perform registration logic here if all checks pass
       try {
         const response = await fetch(url, {
           method: "POST",
@@ -159,8 +155,8 @@ const RegistrationForm = () => {
               value={password}
               onChange={handleInputChange}
               required
-              onPaste={handlePasswordPaste}
-              onCopy={handlePasswordCopy}
+              onPaste={handlePasswordCopyPaste}
+              onCopy={handlePasswordCopyPaste}
             />
           </div>
         </div>
@@ -174,8 +170,8 @@ const RegistrationForm = () => {
               value={confirmPassword}
               onChange={handleInputChange}
               required
-              onPaste={handlePasswordPaste}
-              onCopy={handlePasswordCopy}
+              onPaste={handlePasswordCopyPaste}
+              onCopy={handlePasswordCopyPaste}
             />
             <span
               className="password-toggle"

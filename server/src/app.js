@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const cors = require("cors");
 const express = require("express");
 const parser = require("body-parser");
@@ -17,7 +18,13 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
 
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: ["http://localhost:3000"],
+    exposedHeaders: ["set-cookie"],
+  })
+);
 
 app.use("/api/user", userRouter);
 app.use("/api/todo", validateToken, todoRouter);

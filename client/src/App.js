@@ -2,21 +2,22 @@ import React from "react";
 import {
   createBrowserRouter,
   createRoutesFromElements,
-  Link,
   Outlet,
   Route,
   RouterProvider,
 } from "react-router-dom";
+import axios from "axios";
 import Login from "./components/Login.js";
 import Registration from "./components/Registration";
 import TodoHomePage from "./components/TodoHome";
 import "./index.css";
 
+axios.defaults.withCredentials = true;
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<Root />}>
-        <Route path="login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="registration" element={<Registration />} />
         <Route path="todoHome" element={<TodoHomePage />} />
       </Route>
