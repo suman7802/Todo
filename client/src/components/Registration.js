@@ -90,7 +90,6 @@ const RegistrationForm = () => {
         });
 
         const data = await response.json();
-        console.log(data);
 
         if (response.ok) {
           if (data.message) {
@@ -184,7 +183,7 @@ const RegistrationForm = () => {
           Register
         </button>
         <p>
-          Already have an account? <Link to="/login">Login</Link>
+          Already have an account? <Link to="/">Login</Link>
         </p>
       </form>
     </div>

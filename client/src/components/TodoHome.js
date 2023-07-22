@@ -1,17 +1,18 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
 
+const url = "http://localhost:8000/api/todo";
+
 const TodoHomePage = () => {
   const [todos, setTodos] = useState([]);
-
   const [newTodoText, setNewTodoText] = useState("");
+  const [responseFromServer, setResponseFromServer] = useState("");
 
   useEffect(() => {
     const fetchTodos = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/todo");
+        const response = await axios.get(url);
         const data = response.data;
-        console.log(data);
         const updatedTodos = data.map((todoItem) => {
           return {
             id: todoItem._id,
@@ -21,13 +22,28 @@ const TodoHomePage = () => {
         });
         setTodos(updatedTodos);
       } catch (error) {
-        console.error("Error fetching todos:", error.message);
+        error.code == "ERR_BAD_REQUEST"
+          ? setResponseFromServer(`Please login first`)
+          : setResponseFromServer(error.message);
+        console.error("Error fetching:", error.message);
       }
     };
     fetchTodos();
   }, []);
 
-  const handleDelete = (todoId) => {
+  const handleDelete = async (todoId) => {
+    try {
+      const response = await axios.delete(url, {
+        data: {_id: todoId},
+      });
+      if (response.status === 200) {
+        setResponseFromServer("Todo removed");
+      }
+    } catch (error) {
+      setResponseFromServer(error.message);
+      console.error(error.message);
+    }
+
     const updatedTodos = todos.filter((todo) => todo.id !== todoId);
     setTodos(updatedTodos);
   };
@@ -42,19 +58,34 @@ const TodoHomePage = () => {
     setTodos(updatedTodos);
   };
 
-  const handleSave = (todoId, newText) => {
+  const handleSave = async (todoId, newText) => {
     const trimmedText = newText.trim();
+
     if (trimmedText.length === 0) {
       handleCancel(todoId);
       return;
     }
+    const newTodo = {
+      _id: todoId,
+      todo: newText,
+    };
+    try {
+      const response = await axios.put(url, newTodo);
+      if (response.status === 200) {
+        setResponseFromServer(`Todo Edited`);
+      }
+    } catch (error) {
+      setResponseFromServer(error.message);
+      console.error(error.message);
+    }
 
     const updatedTodos = todos.map((todo) => {
       if (todo.id === todoId) {
-        return {...todo, todo: trimmedText, editable: false};
+        return {...todo, todo: trimmedText};
       }
       return todo;
     });
+
     setTodos(updatedTodos);
   };
 
@@ -78,35 +109,58 @@ const TodoHomePage = () => {
     setTodos(updatedTodos);
   };
 
-  const handleKeyDown = (event, todoId, newText) => {
+  const handleKeyDown = async (event, todoId, newText) => {
     if (event.key === "Enter") {
       event.preventDefault();
       handleSave(todoId, newText);
     }
   };
 
-  const handleToggleComplete = (todoId) => {
+  const handleToggleComplete = async (todoId) => {
     const updatedTodos = todos.map((todo) => {
       if (todo.id === todoId) {
         return {...todo, completed: !todo.completed};
       }
       return todo;
     });
-    setTodos(updatedTodos);
-  };
 
-  const handleAddTodo = () => {
-    const trimmedText = newTodoText.trim();
-    if (trimmedText.length === 0) {
-      return; // Don't add an empty todo
-    }
+    setTodos(updatedTodos);
+
+    const todoToUpdate = updatedTodos.find((todo) => todo.id === todoId);
+    const {completed} = todoToUpdate;
 
     const newTodo = {
-      id: todos.length + 1, // You can use a more robust method for generating unique IDs
+      _id: todoId,
+      completed,
+    };
+
+    try {
+      await axios.put(url, newTodo);
+      setResponseFromServer(`Todo Completed`);
+    } catch (error) {
+      console.error(error.message);
+      setResponseFromServer(error.message);
+    }
+  };
+
+  const handleAddTodo = async () => {
+    const trimmedText = newTodoText.trim();
+
+    if (trimmedText.length === 0) return;
+
+    const newTodo = {
       todo: trimmedText,
       completed: false,
-      editable: false,
     };
+
+    try {
+      axios.post(url, newTodo).then(function (response) {
+        setResponseFromServer(`Added new Todo "${response.data.todo}"`);
+      });
+    } catch (error) {
+      setResponseFromServer(error.message);
+      console.error("Error creating Todo:", error.message);
+    }
 
     setTodos([...todos, newTodo]);
     setNewTodoText("");
@@ -115,6 +169,7 @@ const TodoHomePage = () => {
   return (
     <div className="container">
       <h2>Todo List</h2>
+      {responseFromServer && <p>{responseFromServer}</p>}
       <div className="add-todo">
         <input
           className="inside-add-todo"

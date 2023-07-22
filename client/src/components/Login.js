@@ -46,8 +46,8 @@ const LoginForm = () => {
       const data = await response.data;
       setResponseFromServer(data.message);
     } catch (error) {
-      console.error("Error during login:", error.message);
       setResponseFromServer(error.message);
+      console.error("Error during login:", error.message);
     }
   };
 
