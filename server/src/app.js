@@ -27,14 +27,12 @@ app.use(
   })
 );
 
-app.use(express.static(path.join(__dirname, "build")));
-
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
-
 app.use("/api/user", userRouter);
 app.use("/api/todo", validateToken, todoRouter);
+app.use(express.static(path.join(__dirname, "build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 async function startServer() {
   connectDB();
