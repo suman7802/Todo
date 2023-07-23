@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
 
-const url = "http://localhost:8000/api/todo";
+const url = `${process.env.REACT_APP_BASE_URL}/api/todo`;
 
 const TodoHomePage = () => {
   const [todos, setTodos] = useState([]);

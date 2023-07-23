@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 
-const url = "http://localhost:8000/api/user/login";
+const url = `${process.env.REACT_APP_BASE_URL}/api/user/login`;
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
