@@ -34,6 +34,15 @@ const Root = () => {
   return (
     <div>
       <Outlet />
+      <div className="footer">
+        <a href="https://github.com/suman7802" target="_blank">
+          GitHub
+        </a>
+        <a>All Rights</a>
+        <a href="https://www.facebook.com/suman7802" target="_blank">
+          suman sharma
+        </a>
+      </div>
     </div>
   );
 };

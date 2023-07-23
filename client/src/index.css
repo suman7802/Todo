@@ -55,7 +55,7 @@ p {
 }
 
 a {
-  color: lightgreen;
+  color: rgb(100, 166, 100);
 }
 
 /* Todo Home Page */
@@ -130,4 +130,31 @@ input[type="checkbox"] {
   font-size: 15px;
   margin-top: 4px;
   cursor: pointer;
+}
+
+.footer {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logout-button {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  background-color: rgb(100, 166, 100);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  padding: 7px 10px;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.logout-button:hover {
+  background-color: rgb(80, 133, 80);
 }

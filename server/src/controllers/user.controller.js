@@ -10,7 +10,10 @@ async function checkExistingUser(email) {
 async function httpRegistration(req, res) {
   const {email, password, conformPassword} = req.body;
   const user = await checkExistingUser(email);
-  if (user) return res.status(400).json({message: "User already exists"});
+  if (user) {
+    console.log(`here`)
+    return res.status(400).json({message: "User already exists"});
+  }
   if (password !== conformPassword)
     return res.status(400).json({message: "Passwords do not match"});
 

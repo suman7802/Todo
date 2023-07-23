@@ -43,11 +43,21 @@ const LoginForm = () => {
           withCredentials: true,
         }
       );
-      const data = await response.data;
-      setResponseFromServer(data.message);
+      if (response.status == 200) {
+        setResponseFromServer(response.data.message);
+        window.location.href = "http://localhost:3000/todoHome";
+      } else {
+        setResponseFromServer(response.data.message);
+      }
     } catch (error) {
-      setResponseFromServer(error.message);
-      console.error("Error during login:", error.message);
+      if (error.response.status === 404) {
+        setResponseFromServer("User not found");
+      } else if (error.response.status === 400) {
+        setResponseFromServer("Invalid password");
+      } else {
+        setResponseFromServer(error.message);
+        console.error("Error during login:", error.message);
+      }
     }
   };
 

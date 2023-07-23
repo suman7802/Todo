@@ -76,37 +76,28 @@ const RegistrationForm = () => {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: formData.email,
-            password: formData.password,
-            conformPassword: formData.confirmPassword,
-          }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          if (data.message) {
-            setResponseFromServer(data.message);
-          } else {
-            setResponseFromServer("Registration successful");
-          }
-        } else {
-          if (data.message) {
-            setResponseFromServer(data.message);
-          } else {
-            setResponseFromServer("Registration failed");
-          }
-        }
-      } catch (error) {
-        console.error("Error during registration:", error.message);
+    }
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          conformPassword: formData.confirmPassword,
+        }),
+      });
+      if (response.status == 201) {
+        setResponseFromServer("User Registered");
       }
+      if (response.status == 400) {
+        setResponseFromServer("User already exists");
+      }
+    } catch (error) {
+      setResponseFromServer(error.message);
+      console.error("Error during login:", error.message);
     }
   };
 

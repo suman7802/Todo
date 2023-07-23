@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const url = "http://localhost:8000/api/todo";
 
@@ -166,9 +167,19 @@ const TodoHomePage = () => {
     setNewTodoText("");
   };
 
+  const handleLogout = () => {
+    document.cookie =
+      "access-token-01" + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    window.location.href = "http://localhost:3000";
+  };
+
   return (
     <div className="container">
       <h2>Todo List</h2>
+
+      <button className="logout-button" onClick={handleLogout}>
+        Logout
+      </button>
       {responseFromServer && <p>{responseFromServer}</p>}
       <div className="add-todo">
         <input
