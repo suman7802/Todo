@@ -1,6 +1,6 @@
-import React, {useState} from "react";
-import {Link} from "react-router-dom";
 import axios from "axios";
+import React, {useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 
 const url = "http://localhost:8000/api/user/login";
 
@@ -10,6 +10,7 @@ const LoginForm = () => {
   const [emailError, setEmailError] = useState("");
   const [responseFromServer, setResponseFromServer] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const navigate = useNavigate();
 
   const validateEmail = (email) => {
     const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -45,19 +46,13 @@ const LoginForm = () => {
       );
       if (response.status == 200) {
         setResponseFromServer(response.data.message);
-        window.location.href = "http://localhost:3000/todoHome";
+        navigate("/todoHome");
       } else {
         setResponseFromServer(response.data.message);
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        setResponseFromServer("User not found");
-      } else if (error.response.status === 400) {
-        setResponseFromServer("Invalid password");
-      } else {
-        setResponseFromServer(error.message);
-        console.error("Error during login:", error.message);
-      }
+      setResponseFromServer(error.message);
+      console.error("Error During Login:", error.message);
     }
   };
 

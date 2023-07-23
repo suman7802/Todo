@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 
 const url = "http://localhost:8000/api/todo";
 
@@ -23,22 +22,29 @@ const TodoHomePage = () => {
         });
         setTodos(updatedTodos);
       } catch (error) {
-        error.code == "ERR_BAD_REQUEST"
-          ? setResponseFromServer(`Please login first`)
-          : setResponseFromServer(error.message);
-        console.error("Error fetching:", error.message);
+        setResponseFromServer(`Error Fetching Data`);
+        console.error("Error Fetching:", error.message);
       }
     };
     fetchTodos();
   }, []);
 
-  const handleDelete = async (todoId) => {
+  useEffect(() => {
+    if (responseFromServer) {
+      const timer = setTimeout(() => {
+        setResponseFromServer("");
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [responseFromServer]);
+
+  const handleRemove = async (todoId) => {
     try {
       const response = await axios.delete(url, {
         data: {_id: todoId},
       });
       if (response.status === 200) {
-        setResponseFromServer("Todo removed");
+        setResponseFromServer("Todo Removed");
       }
     } catch (error) {
       setResponseFromServer(error.message);
@@ -137,7 +143,7 @@ const TodoHomePage = () => {
 
     try {
       await axios.put(url, newTodo);
-      setResponseFromServer(`Todo Completed`);
+      setResponseFromServer(`Status Changed`);
     } catch (error) {
       console.error(error.message);
       setResponseFromServer(error.message);
@@ -160,7 +166,7 @@ const TodoHomePage = () => {
       });
     } catch (error) {
       setResponseFromServer(error.message);
-      console.error("Error creating Todo:", error.message);
+      console.error("Error Creating Todo:", error.message);
     }
 
     setTodos([...todos, newTodo]);
@@ -170,7 +176,7 @@ const TodoHomePage = () => {
   const handleLogout = () => {
     document.cookie =
       "access-token-01" + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-    window.location.href = "http://localhost:3000";
+    window.location.href = "/";
   };
 
   return (
@@ -223,7 +229,7 @@ const TodoHomePage = () => {
                 </>
               ) : (
                 <>
-                  <button onClick={() => handleDelete(todo.id)}>Delete</button>
+                  <button onClick={() => handleRemove(todo.id)}>Remove</button>
                   <button onClick={() => handleEdit(todo.id)}>Edit</button>
                   <input
                     type="checkbox"

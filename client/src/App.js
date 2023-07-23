@@ -18,8 +18,8 @@ const App = () => {
     createRoutesFromElements(
       <Route path="/" element={<Root />}>
         <Route path="/" element={<Login />} />
-        <Route path="registration" element={<Registration />} />
-        <Route path="todoHome" element={<TodoHomePage />} />
+        <Route path="/registration" element={<Registration />} />
+        <Route path="/todoHome" element={<TodoHomePage />} />
       </Route>
     )
   );
@@ -38,10 +38,10 @@ const Root = () => {
         <a href="https://github.com/suman7802" target="_blank">
           GitHub
         </a>
-        <a>All Rights</a>
         <a href="https://www.facebook.com/suman7802" target="_blank">
           suman sharma
         </a>
+        <a>2023 Copyright. All Rights Reserved.</a>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ const express = require("express");
 const parser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
+const path = require("path");
 
 const connectDB = require("./database/db");
 const userRouter = require("./routes/user.route");
@@ -25,6 +26,12 @@ app.use(
     exposedHeaders: ["set-cookie"],
   })
 );
+
+app.use(express.static(path.join(__dirname, "build")));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 app.use("/api/user", userRouter);
 app.use("/api/todo", validateToken, todoRouter);

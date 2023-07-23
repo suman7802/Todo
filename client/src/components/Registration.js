@@ -31,7 +31,7 @@ const RegistrationForm = () => {
     const isValid = /^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(password);
     setErrors((prevErrors) => ({
       ...prevErrors,
-      password: isValid ? "" : "Password: 8+ chars, special chars required",
+      password: isValid ? "" : "8+ Chars, Num, Special Chars",
     }));
   };
 
@@ -39,7 +39,7 @@ const RegistrationForm = () => {
     const isValid = formData.password === confirmPassword;
     setErrors((prevErrors) => ({
       ...prevErrors,
-      confirmPassword: isValid ? "" : "Passwords don't match.",
+      confirmPassword: isValid ? "" : "Passwords Don't Match.",
     }));
   };
 
@@ -60,6 +60,7 @@ const RegistrationForm = () => {
       validatePassword(value);
       validateConfirmPassword(formData.confirmPassword);
     } else if (name === "confirmPassword") {
+      validatePassword(value);
       validateConfirmPassword(value);
     }
   };
@@ -72,7 +73,6 @@ const RegistrationForm = () => {
     if (formData.password !== formData.confirmPassword) {
       validationErrors.confirmPassword = "Passwords don't match.";
     }
-
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
@@ -93,11 +93,11 @@ const RegistrationForm = () => {
         setResponseFromServer("User Registered");
       }
       if (response.status == 400) {
-        setResponseFromServer("User already exists");
+        setResponseFromServer("User Already Exists");
       }
     } catch (error) {
       setResponseFromServer(error.message);
-      console.error("Error during login:", error.message);
+      console.error("Error During Login:", error.message);
     }
   };
 
