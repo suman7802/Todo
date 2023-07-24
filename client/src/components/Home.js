@@ -2,8 +2,8 @@ import axios from "axios";
 import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 
-const url = `/api/todo`;
-// const url = `http://localhost:8000/api/todo`;
+// const url = `/api/todo`;
+const url = `http://localhost:8000/api/todo`;
 
 const Home = () => {
   const [todos, setTodos] = useState([]);

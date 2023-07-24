@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
 
-const url = `/api/user/registration`;
-// const url = `http://localhost:8000/api/user/registration`;
+// const url = `/api/user/registration`;
+const url = `http://localhost:8000/api/user/registration`;
 
 const RegistrationForm = () => {
   const [responseFromServer, setResponseFromServer] = useState("");
