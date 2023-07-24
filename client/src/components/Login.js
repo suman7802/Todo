@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {Link, useNavigate} from "react-router-dom";
 
 // const url = `/api/user/login`;
@@ -12,6 +12,11 @@ const LoginForm = () => {
   const [responseFromServer, setResponseFromServer] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const cookieExists = document.cookie.indexOf(`access-token-01=`) !== -1;
+    cookieExists ? navigate("/home") : navigate("/login");
+  }, []);
 
   const validateEmail = (email) => {
     const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
