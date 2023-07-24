@@ -18,8 +18,8 @@ app.use(helmet());
 app.use(
   cors({
     credentials: true,
-    // origin: [process.env.REACT_APP_BASE_URL],
-    origin: ["http://localhost:3000"],
+    origin: [process.env.REACT_APP_BASE_URL],
+    // origin: ["http://localhost:3000"],
     exposedHeaders: ["set-cookie"],
   })
 );
