@@ -1,9 +1,10 @@
-import React, {useState, useEffect} from "react";
 import axios from "axios";
+import React, {useState, useEffect} from "react";
 
-const url = `${process.env.REACT_APP_BASE_URL}/api/todo`;
+// const url = `/api/todo`;
+const url = `http://localhost:8000/api/todo`;
 
-const TodoHomePage = () => {
+const Home = () => {
   const [todos, setTodos] = useState([]);
   const [newTodoText, setNewTodoText] = useState("");
   const [responseFromServer, setResponseFromServer] = useState("");
@@ -143,7 +144,7 @@ const TodoHomePage = () => {
 
     try {
       await axios.put(url, newTodo);
-      setResponseFromServer(`Status Changed`);
+      setResponseFromServer(`Updated`);
     } catch (error) {
       console.error(error.message);
       setResponseFromServer(error.message);
@@ -246,4 +247,4 @@ const TodoHomePage = () => {
   );
 };
 
-export default TodoHomePage;
+export default Home;

@@ -2,7 +2,8 @@ import axios from "axios";
 import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 
-const url = `${process.env.REACT_APP_BASE_URL}/api/user/login`;
+// const url = `/api/user/login`;
+const url = `http://localhost:8000/api/user/login`;
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -44,15 +45,14 @@ const LoginForm = () => {
           withCredentials: true,
         }
       );
-      if (response.status == 200) {
-        setResponseFromServer(response.data.message);
-        navigate("/todoHome");
-      } else {
-        setResponseFromServer(response.data.message);
-      }
+      if (response.status == 200) navigate("/Home");
     } catch (error) {
-      setResponseFromServer(error.message);
-      console.error("Error During Login:", error.message);
+      if (error.response && error.response.status === 400) {
+        setResponseFromServer("Invalid Email or Password");
+      } else {
+        setResponseFromServer(error.message);
+        console.error("Error During Login:", error.message);
+      }
     }
   };
 
